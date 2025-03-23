@@ -7,9 +7,9 @@ import "./Play_To_Earn_Coin.sol";
 
 contract PlayToEarnNMRIH is ERC721URIStorage, Ownable {
     PlayToEarnCoin private _playToEarn =
-        PlayToEarnCoin(address(0xf09B8366705341289652b4E85252f81F64eEE843)); // Official Coin Address
+        PlayToEarnCoin(address(0x95A8Aec985030C741BB6281B9dFa6E3F818cee37)); // Official Coin Address
 
-    uint256[] public availableRarity = [1]; // Available rarity to user earn in mint
+    uint256[] public availableTokens = [1]; // Available tokens to user earn in mint
     uint256[] public rarityCostIndex = [20000000000000000000]; // The cost for rarity
     uint16[] public rarityChanceIndex = [100]; // The chance to receive a better rarity
     uint256 public maxRarityIndex = 0; // The max rarity value to user receive
@@ -21,7 +21,7 @@ contract PlayToEarnNMRIH is ERC721URIStorage, Ownable {
 
     constructor()
         ERC721("Play To Earn NMRIH", "PTENMRIH")
-        Ownable(address(0x6E3ff47d5b601D01487D7CcE623EAC0C02ccE288))
+        Ownable(address(0x518Ab58fD7ddcFE5f8Ee02a59472Df3220a1d86F))
     {}
 
     function getAllowance() external view returns (uint256) {
@@ -78,7 +78,7 @@ contract PlayToEarnNMRIH is ERC721URIStorage, Ownable {
             }
         }
         // Generate the skin id
-        uint256 skinId = getRandomNumber(availableRarity[rarity]);
+        uint256 skinId = getRandomNumber(availableTokens[rarity]);
 
         // Generate token data
         string memory metadataURI = string(
@@ -111,14 +111,14 @@ contract PlayToEarnNMRIH is ERC721URIStorage, Ownable {
 
     function increaseTokenCount(uint8 rarity) external onlyOwner {
         require(rarity <= maxRarityIndex, "Invalid rarity number");
-        availableRarity[rarity]++;
+        availableTokens[rarity]++;
     }
 
     function increaseRarityCount(uint256 rarityCost, uint16 rarityChance)
         external
         onlyOwner
     {
-        availableRarity.push(1);
+        availableTokens.push(1);
         rarityCostIndex.push(rarityCost);
         rarityChanceIndex.push(rarityChance);
         maxRarityIndex++;
