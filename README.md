@@ -83,12 +83,16 @@ Players can use the command ``!tps`` to view themselves in third person
 
 How ID's works? ``??-??`` the firsts numbers is the skin rarity, the second is the skin uniqueid
 
+The ``walletaddress`` and ``nftid`` on database table is necessary to verify if the player is owner of the selected skin
+
 ## Using
 Create a new table for storing player skins and selections
 ```sql
 CREATE TABLE nmrih_skins (
     uniqueid VARCHAR(255) NOT NULL PRIMARY KEY,
+    walletaddress VARCHAR(255) DEFAULT null,
     skinid VARCHAR(255) NOT NULL,
+    nftid DECIMAL(78, 0) NOT NULL
 );
 ```
 Copy ``skins_reader`` folder inside ``nmrih/addons/sourcemod/configs
