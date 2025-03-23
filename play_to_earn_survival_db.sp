@@ -13,7 +13,7 @@ public Plugin myinfo =
 
 Database    walletsDB;
 
-static char onlinePlayers[MAXPLAYERS][256];
+static char onlinePlayers[MAXPLAYERS][512];
 static int  onlinePlayersCount      = 0;
 
 bool        alertPlayerIncomings    = true;
@@ -197,6 +197,11 @@ public void OnPlayerDisconnect(Event event, const char[] name, bool dontBroadcas
                       playerName, userId, networkId, reason, isBot);
 
         PrintToServer("[PTE] Online Players: %d", onlinePlayersCount);
+
+        if (onlinePlayersCount <= 0)
+        {
+            cleanupOnlinePlayers();
+        }
     }
 }
 
@@ -425,6 +430,11 @@ public void OnExtractionBegin(Event event, const char[] name, bool dontBroadcast
 public void OnPracticeEnded(Event event, const char[] name, bool dontBroadcast)
 {
     playerAlives = 0;
+}
+
+public void OnServerEnterHibernation()
+{
+    cleanupOnlinePlayers();
 }
 //
 //
@@ -791,6 +801,15 @@ void updateOnlinePlayerByUserId(int userId, JSON_Object updatedPlayerObj)
             }
         }
     }
+}
+
+void cleanupOnlinePlayers()
+{
+    for (int i = 0; i < MAXPLAYERS; i++)
+    {
+        strcopy(onlinePlayers[i], 256, "");
+    }
+    onlinePlayersCount = 0;
 }
 //
 //
