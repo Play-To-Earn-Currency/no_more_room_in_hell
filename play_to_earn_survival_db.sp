@@ -435,6 +435,20 @@ public void OnPracticeEnded(Event event, const char[] name, bool dontBroadcast)
 public void OnServerEnterHibernation()
 {
     cleanupOnlinePlayers();
+    walletsDB.Close();
+    walletsDB = null;
+}
+
+public void OnServerExitHibernation()
+{
+    char walletDBError[32];
+    walletsDB = SQL_Connect("default", true, walletDBError, sizeof(walletDBError));
+    if (walletsDB == null)
+    {
+        PrintToServer("[PTE] ERROR Connecting to the database: %s", walletDBError);
+        PrintToServer("[PTE] The plugin will stop now...");
+        return;
+    }
 }
 //
 //
@@ -479,6 +493,7 @@ public Action CommandRegisterWallet(int client, int args)
 
             if (!SQL_Execute(statement_RegisterWallet_Exists))
             {
+                SQL_GetError(walletsDB, dbStatementError, sizeof(dbStatementError));
                 PrintToServer("[PTE] Update %d wallet to: %s", steamId, walletAddress);
                 PrintToServer(dbStatementError);
             }
@@ -495,6 +510,7 @@ public Action CommandRegisterWallet(int client, int args)
 
             if (!SQL_Execute(statement_RegisterWallet))
             {
+                SQL_GetError(walletsDB, dbStatementError, sizeof(dbStatementError));
                 PrintToServer("[PTE] Update %d wallet to: %s", steamId, walletAddress);
                 PrintToServer(dbStatementError);
 
@@ -582,6 +598,7 @@ void IncrementWallet(
 
     if (!SQL_Execute(statement_IncrementWallet))
     {
+        SQL_GetError(walletsDB, dbStatementError, sizeof(dbStatementError));
         PrintToServer("[PTE] Cannot increment %d values", steamId);
         PrintToServer(dbStatementError);
     }
@@ -612,9 +629,8 @@ bool WalletRegistered(const int steamId)
 
     if (!SQL_Execute(statement_GetWalletRegistered))
     {
-        char error[128];
-        SQL_GetError(walletsDB, error, sizeof(error));
-        PrintToServer("[PTE] Error checking if %d exists: %s", steamId, error);
+        SQL_GetError(walletsDB, dbStatementError, sizeof(dbStatementError));
+        PrintToServer("[PTE] Error checking if %d exists: %s", steamId, dbStatementError);
         return false;
     }
     else {
@@ -644,9 +660,8 @@ bool PlayerRegistered(const int steamId)
 
     if (!SQL_Execute(statement_GetPlayerRegistered))
     {
-        char error[128];
-        SQL_GetError(walletsDB, error, sizeof(error));
-        PrintToServer("[PTE] Error checking if %d exists: %s", steamId, error);
+        SQL_GetError(walletsDB, dbStatementError, sizeof(dbStatementError));
+        PrintToServer("[PTE] Error checking if %d exists: %s", steamId, dbStatementError);
         return false;
     }
     else {
@@ -676,9 +691,8 @@ bool RegisterPlayer(const int steamId)
 
     if (!SQL_Execute(statement_RegisterPlayer))
     {
-        char error[128];
-        SQL_GetError(walletsDB, error, sizeof(error));
-        PrintToServer("[PTE] Error checking if %d exists: %s", steamId, error);
+        SQL_GetError(walletsDB, dbStatementError, sizeof(dbStatementError));
+        PrintToServer("[PTE] Error checking if %d exists: %s", steamId, dbStatementError);
         return false;
     }
     else {
