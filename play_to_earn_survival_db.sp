@@ -32,33 +32,33 @@ char        waveRewardsShow[15][20] = { "0.1", "0.1", "0.1",
 int         scorePoints[20]         = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
 char        scoreRewards[20][20]    = {
     "100000000000000000",
+    "150000000000000000",
     "200000000000000000",
+    "250000000000000000",
     "300000000000000000",
+    "350000000000000000",
     "400000000000000000",
+    "450000000000000000",
     "500000000000000000",
+    "550000000000000000",
     "600000000000000000",
+    "650000000000000000",
     "700000000000000000",
+    "750000000000000000",
     "800000000000000000",
+    "850000000000000000",
     "900000000000000000",
+    "950000000000000000",
     "1000000000000000000",
-    "1100000000000000000",
-    "1200000000000000000",
-    "1300000000000000000",
-    "1400000000000000000",
-    "1500000000000000000",
-    "1600000000000000000",
-    "1700000000000000000",
-    "1800000000000000000",
-    "1900000000000000000",
-    "2000000000000000000"
+    "1050000000000000000"
 };
-char        scoreRewardsShow[20][20] = { "0.1", "0.2", "0.3",
-                                  "0.4", "0.5", "0.6",
-                                  "0.7", "0.8", "0.9",
-                                  "1.0", "1.1", "1.2", "1.3",
-                                  "1.4", "1.5", "1.6",
-                                  "1.7", "1.8", "1.9",
-                                  "2.0" };
+char        scoreRewardsShow[20][20] = { "0.1", "0.15", "0.2",
+                                  "0.25", "0.3", "0.35",
+                                  "0.4", "0.45", "0.5",
+                                  "0.55", "0.6", "0.65", "0.7",
+                                  "0.75", "0.8", "0.85",
+                                  "0.9", "0.95", "1.0",
+                                  "1.05" };
 
 int         serverWave               = 0;
 int         playerAlives             = 0;
@@ -432,22 +432,52 @@ public void OnPracticeEnded(Event event, const char[] name, bool dontBroadcast)
     playerAlives = 0;
 }
 
-public void OnServerEnterHibernation()
+
+public void OnMapEnd()
 {
-    cleanupOnlinePlayers();
+    PrintToServer("[PTE] Map ended");
+
     walletsDB.Close();
     walletsDB = null;
 }
 
-public void OnServerExitHibernation()
+public void OnMapStart()
 {
-    char walletDBError[32];
-    walletsDB = SQL_Connect("default", true, walletDBError, sizeof(walletDBError));
     if (walletsDB == null)
     {
-        PrintToServer("[PTE] ERROR Connecting to the database: %s", walletDBError);
-        PrintToServer("[PTE] The plugin will stop now...");
-        return;
+        char walletDBError[32];
+        walletsDB = SQL_Connect("default", true, walletDBError, sizeof(walletDBError));
+        if (walletsDB == null)
+        {
+            PrintToServer("[PTE] ERROR Connecting to the database: %s", walletDBError);
+            PrintToServer("[PTE] The plugin will stop now...");
+            return;
+        }
+    }
+}
+
+public void OnServerEnterHibernation()
+{
+    cleanupOnlinePlayers();
+    if (walletsDB != null)
+    {
+        walletsDB.Close();
+        walletsDB = null;
+    }
+}
+
+public void OnServerExitHibernation()
+{
+    if (walletsDB == null)
+    {
+        char walletDBError[32];
+        walletsDB = SQL_Connect("default", true, walletDBError, sizeof(walletDBError));
+        if (walletsDB == null)
+        {
+            PrintToServer("[PTE] ERROR Connecting to the database: %s", walletDBError);
+            PrintToServer("[PTE] The plugin will stop now...");
+            return;
+        }
     }
 }
 //
