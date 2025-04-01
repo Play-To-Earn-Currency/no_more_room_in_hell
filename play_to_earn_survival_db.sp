@@ -11,7 +11,7 @@ public Plugin myinfo =
     url         = "https://github.com/GxsperMain/nmrih_play_to_earn"
 };
 
-Database    walletsDB;
+static Database    walletsDB;
 
 static char onlinePlayers[MAXPLAYERS][512];
 static int  onlinePlayersCount      = 0;

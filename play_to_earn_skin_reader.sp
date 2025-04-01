@@ -15,7 +15,7 @@ public Plugin myinfo =
 
 }
 
-Database          walletsDB;
+static Database          walletsDB;
 
 static const char SKINS_DOWNLOAD_LIST[] = "addons/sourcemod/configs/skins_reader/downloads_list.ini",
                   SKINS_ID_PATH[]       = "addons/sourcemod/configs/skins_reader/skins_id.init";
