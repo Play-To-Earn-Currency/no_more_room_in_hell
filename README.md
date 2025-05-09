@@ -31,7 +31,7 @@ CREATE TABLE nmrih (
 - For survival servers use: ``-pteSurvival 1`` and for objective servers: ``-pteObjective 1`` as commandline parameter, otherwise the PTE plugin will not be initialized
 
 # Skin Reader
-This plugin will automatically check players equipped skin in ``nmrih_skins`` table, if you plan to make a official PTE skin you should take a look at [PTE Community Manager](https://github.com/Play-To-Earn-Currency/community_manager), the official PTE NMRIH is: [0xDdAc69e43180C06fe690DdB28Ea58d7AfDb39147](https://polygonscan.com/token/0xDdAc69e43180C06fe690DdB28Ea58d7AfDb39147)
+This plugin will automatically check players equipped skin in ``nmrih_skins`` table, if you plan to make a official PTE skin you should take a look at [PTE Community Manager](https://github.com/Play-To-Earn-Currency/community_manager), the official PTE NMRIH is: [0xDdAc69e43180C06fe690DdB28Ea58d7AfDb39147](https://polygonscan.com/token/0x165f10BFbCF6f7A533B38C6A4537FdF7aD4191B2)
 
 Players can use the command ``!tps`` to view themselves in third person
 
