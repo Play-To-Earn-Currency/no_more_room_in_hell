@@ -31,7 +31,7 @@ CREATE TABLE nmrih (
 - For survival servers use: ``-pteSurvival 1`` and for objective servers: ``-pteObjective 1`` as commandline parameter, otherwise the PTE plugin will not be initialized
 
 # Skin Reader
-This plugin will automatically check players equipped skin in ``nmrih_skins`` table, if you plan to make a official PTE skin you should take a look at [PTE Community Manager](https://github.com/Play-To-Earn-Currency/community_manager), the official PTE NMRIH is: [0xDdAc69e43180C06fe690DdB28Ea58d7AfDb39147](https://polygonscan.com/token/0x165f10BFbCF6f7A533B38C6A4537FdF7aD4191B2)
+This plugin will automatically check players equipped skin in ``nmrih_skins`` table, if you plan to make a official PTE skin you should take a look at [PTE Community Manager](https://github.com/Play-To-Earn-Currency/community_manager), the official PTE NMRIH is: [0x6FFd600e030B44ba5A0C4B9242229a420533d467](https://polygonscan.com/token/0x6FFd600e030B44ba5A0C4B9242229a420533d467)
 
 Players can use the command ``!tps`` to view themselves in third person
 
@@ -55,9 +55,12 @@ Now you can add your skins in ``skins_id.init`` and ``downloads_list.ini`` to se
 
 Necessary to have a FastDL system setup you can check [here](https://forums.alliedmods.net/showthread.php?p=1225670) a simple tutorial
 
-Everthing should works now, you can edit your database table ``nmrih_skins`` to handle player skins
+Everthing should work now, you can edit your database table ``nmrih_skins`` to handle player skins
 
 If you need the entire skin source for generating your own NMRIH server, you should take a look in the PTE NMRIH official discord server
+
+## Web Skin
+A template website for running a skin selector
 
 # Recomendations
 - [Anti Server Lag Exploits](https://forums.alliedmods.net/showthread.php?p=2788390)

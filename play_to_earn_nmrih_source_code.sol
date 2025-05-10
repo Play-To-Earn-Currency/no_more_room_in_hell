@@ -3,9 +3,10 @@ pragma solidity 0.8.26;
 import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/refs/heads/master/contracts/token/ERC721/ERC721.sol";
 import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/refs/heads/master/contracts/access/Ownable.sol";
 import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/refs/heads/master/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/refs/heads/master/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "./Play_To_Earn_Coin.sol";
 
-contract PlayToEarnNMRIH is ERC721URIStorage, Ownable {
+contract PlayToEarnNMRIH is ERC721URIStorage, ERC721Enumerable, Ownable {
     PlayToEarnCoin private _playToEarn =
         PlayToEarnCoin(address(0x95A8Aec985030C741BB6281B9dFa6E3F818cee37)); // Official Coin Address
 
@@ -135,5 +136,51 @@ contract PlayToEarnNMRIH is ERC721URIStorage, Ownable {
         _burn(tokenId);
 
         emit NFTBurned(msg.sender, tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721Enumerable, ERC721URIStorage)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
+    ) internal override(ERC721, ERC721Enumerable) returns (address) {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(address account, uint128 value)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._increaseBalance(account, value);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function tokensOfOwner(address owner)
+        external
+        view
+        returns (uint256[] memory)
+    {
+        uint256 balance = balanceOf(owner);
+        uint256[] memory tokenIds = new uint256[](balance);
+        for (uint256 i = 0; i < balance; i++) {
+            tokenIds[i] = tokenOfOwnerByIndex(owner, i);
+        }
+        return tokenIds;
     }
 }
