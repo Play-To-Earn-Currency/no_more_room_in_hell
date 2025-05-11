@@ -11,26 +11,26 @@ public Plugin myinfo =
     url         = "https://github.com/GxsperMain/nmrih_play_to_earn"
 };
 
-static Database    walletsDB;
+static Database walletsDB;
 
-static char onlinePlayers[MAXPLAYERS][512];
-static int  onlinePlayersCount      = 0;
+static char     onlinePlayers[MAXPLAYERS][512];
+static int      onlinePlayersCount      = 0;
 
-bool        alertPlayerIncomings    = true;
+bool            alertPlayerIncomings    = true;
 
-char        waveRewards[15][20]     = { "100000000000000000", "10000000000000000", "100000000000000000",
+char            waveRewards[15][20]     = { "100000000000000000", "10000000000000000", "100000000000000000",
                              "100000000000000000", "200000000000000000", "200000000000000000",
                              "200000000000000000", "200000000000000000", "200000000000000000",
                              "200000000000000000", "200000000000000000", "200000000000000000",
                              "200000000000000000", "200000000000000000", "300000000000000000" };
-const int   maxWaves                = 15;
-char        waveRewardsShow[15][20] = { "0.1", "0.1", "0.1",
+const int       maxWaves                = 15;
+char            waveRewardsShow[15][20] = { "0.1", "0.1", "0.1",
                                  "0.1", "0.2", "0.2",
                                  "0.2", "0.2", "0.2",
                                  "0.2", "0.2", "0.2",
                                  "0.2", "0.2", "0.3" };
-int         scorePoints[20]         = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
-char        scoreRewards[20][20]    = {
+int             scorePoints[20]         = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
+char            scoreRewards[20][20]    = {
     "100000000000000000",
     "150000000000000000",
     "200000000000000000",
@@ -83,6 +83,12 @@ public void OnPluginStart()
             PrintToServer("[PTE Survival] Will not be initialized, 'pteSurvival' is not '1'");
             return;
         }
+    }
+
+    regex = CompileRegex("^0x[a-fA-F0-9]{40}$");
+    if (regex == INVALID_HANDLE)
+    {
+        LogError("Failed to compile wallet regex.");
     }
 
     char walletDBError[32];
@@ -432,7 +438,6 @@ public void OnPracticeEnded(Event event, const char[] name, bool dontBroadcast)
     playerAlives = 0;
 }
 
-
 public void OnMapEnd()
 {
     PrintToServer("[PTE] Map ended");
@@ -531,6 +536,10 @@ public Action CommandRegisterWallet(int client, int args)
                 if (SQL_GetAffectedRows(statement_RegisterWallet_Exists) == 0)
                 {
                     PrintToServer("[PTE] ERROR No rows affected while updating player %d wallet", steamId);
+                    PrintToChat(client, "Wallet updated!");
+                }
+                else {
+                    PrintToChat(client, "Wallet updated!");
                 }
             }
         }

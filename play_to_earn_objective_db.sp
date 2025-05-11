@@ -11,26 +11,26 @@ public Plugin myinfo =
     url         = "https://github.com/GxsperMain/nmrih_play_to_earn"
 };
 
-static Database    walletsDB;
+static Database walletsDB;
 
-static char onlinePlayers[MAXPLAYERS][512];
-static int  onlinePlayersCount           = 0;
+static char     onlinePlayers[MAXPLAYERS][512];
+static int      onlinePlayersCount           = 0;
 
-bool        alertPlayerIncomings         = true;
+bool            alertPlayerIncomings         = true;
 
-char        objectiveRewards[15][20]     = { "200000000000000000", "20000000000000000", "300000000000000000",
+char            objectiveRewards[15][20]     = { "200000000000000000", "20000000000000000", "300000000000000000",
                                   "300000000000000000", "400000000000000000", "400000000000000000",
                                   "500000000000000000", "500000000000000000", "500000000000000000",
                                   "500000000000000000", "500000000000000000", "500000000000000000",
                                   "500000000000000000", "500000000000000000", "500000000000000000" };
-const int   maxObjectives                = 15;
-char        objectiveRewardsShow[15][20] = { "0.2", "0.2", "0.3",
+const int       maxObjectives                = 15;
+char            objectiveRewardsShow[15][20] = { "0.2", "0.2", "0.3",
                                       "0.3", "0.4", "0.4",
                                       "0.5", "0.5", "0.5",
                                       "0.5", "0.5", "0.5",
                                       "0.5", "0.5", "0.5" };
-int         scorePoints[20]              = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
-char        scoreRewards[20][20]         = {
+int             scorePoints[20]              = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
+char            scoreRewards[20][20]         = {
     "100000000000000000",
     "150000000000000000",
     "200000000000000000",
@@ -88,7 +88,11 @@ public void OnPluginStart()
         }
     }
 
-    regex = CompileRegex("^[a-zA-Z0-9]{42}$");
+    regex = CompileRegex("^0x[a-fA-F0-9]{40}$");
+    if (regex == INVALID_HANDLE)
+    {
+        LogError("Failed to compile wallet regex.");
+    }
 
     char walletDBError[32];
     walletsDB = SQL_Connect("default", true, walletDBError, sizeof(walletDBError));
@@ -664,6 +668,10 @@ public Action CommandRegisterWallet(int client, int args)
                 if (SQL_GetAffectedRows(statement_RegisterWallet_Exists) == 0)
                 {
                     PrintToServer("[PTE] ERROR No rows affected while updating player %d wallet", steamId);
+                    PrintToChat(client, "Wallet updated!");
+                }
+                else {
+                    PrintToChat(client, "Wallet updated!");
                 }
             }
         }
