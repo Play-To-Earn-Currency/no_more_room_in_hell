@@ -230,7 +230,7 @@ public void OnObjectiveStart(Event event, const char[] name, bool dontBroadcast)
         JSON_Object playerObj = json_decode(onlinePlayers[i]);
         if (playerObj == null)
         {
-            PrintToServer("[PTE] [OnWaveFinish] ERROR: %d (online index) have any invalid player object: ", i, onlinePlayers[i]);
+            PrintToServer("[PTE] [OnWaveFinish] ERROR: %d (online index) have any invalid player object: %s", i, onlinePlayers[i]);
             continue;
         }
 
@@ -507,7 +507,7 @@ public void OnExtractionComplete(Event event, const char[] name, bool dontBroadc
         JSON_Object playerObj = json_decode(onlinePlayers[i]);
         if (playerObj == null)
         {
-            PrintToServer("[PTE] [OnWaveFinish] ERROR: %d (online index) have any invalid player object: ", i, onlinePlayers[i]);
+            PrintToServer("[PTE] [OnExtractionComplete] ERROR: %d (online index) have any invalid player object: %s", i, onlinePlayers[i]);
             continue;
         }
 
@@ -574,8 +574,13 @@ public void OnMapEnd()
 {
     PrintToServer("[PTE] Map ended");
 
-    walletsDB.Close();
-    walletsDB = null;
+    if (walletsDB != null)
+    {
+        walletsDB.Close();
+        walletsDB = null;
+
+        PrintToServer("[PTE] Map ended, database closed");
+    }
 }
 
 public void OnMapStart()
@@ -584,11 +589,13 @@ public void OnMapStart()
     {
         char walletDBError[32];
         walletsDB = SQL_Connect("default", true, walletDBError, sizeof(walletDBError));
-        if (walletsDB == null)
+        if (walletDBError[0] != '\0')
         {
             PrintToServer("[PTE] ERROR Connecting to the database: %s", walletDBError);
-            PrintToServer("[PTE] The plugin will stop now...");
             return;
+        }
+        else {
+            PrintToServer("[PTE] Map started, database re-connection successfully");
         }
     }
 }
@@ -600,6 +607,7 @@ public void OnServerEnterHibernation()
     {
         walletsDB.Close();
         walletsDB = null;
+        PrintToServer("[PTE] Server hibernating, database closed");
     }
 }
 
@@ -607,14 +615,20 @@ public void OnServerExitHibernation()
 {
     if (walletsDB == null)
     {
-        char walletDBError[32];
+        char walletDBError[256];
         walletsDB = SQL_Connect("default", true, walletDBError, sizeof(walletDBError));
-        if (walletsDB == null)
+
+        if (walletDBError[0] != '\0')
         {
             PrintToServer("[PTE] ERROR Connecting to the database: %s", walletDBError);
-            PrintToServer("[PTE] The plugin will stop now...");
             return;
         }
+        else {
+            PrintToServer("[PTE] Exited from hibernation, database re-connection successfully");
+        }
+    }
+    else {
+        PrintToServer("[PTE] ???? Server exit from hibernation but the database is not null");
     }
 }
 //
