@@ -206,7 +206,7 @@ public void OnObjectiveComplete(Event event, const char[] name, bool dontBroadca
         int client = onlinePlayers[i];
         if (client == 0) break;    // End of the list
 
-        if (IsPlayerAlive(client))
+        if (isDeadPlayer[client])
         {
             char playerName[32];
             GetClientName(client, playerName, sizeof(playerName));
@@ -299,7 +299,7 @@ public void OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 
     isDeadPlayer[client] = false;
 
-    PrintToServer("[PTE] Player died %d", userid);
+    PrintToServer("[PTE] Player spawned %d", userid);
 }
 
 public void OnPracticeEnded(Event event, const char[] name, bool dontBroadcast)
@@ -403,6 +403,7 @@ public void OnServerEnterHibernation()
     for (int i = 0; i < MAXPLAYERS; i++)
     {
         lastPlayerScore[i] = 0;
+        isDeadPlayer[i]    = false;
     }
     objectivesCompleted = 0;
 }
