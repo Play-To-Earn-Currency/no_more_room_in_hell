@@ -177,7 +177,7 @@ public void OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 
     isDeadPlayer[client] = false;
 
-    PrintToServer("[PTE] Player died %d", userid);
+    PrintToServer("[PTE] Player spawned %d", userid);
 }
 
 public void OnWaveStart(Event event, const char[] name, bool dontBroadcast)
