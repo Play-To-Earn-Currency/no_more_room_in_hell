@@ -10,25 +10,25 @@ public Plugin myinfo =
     url         = "https://github.com/GxsperMain/nmrih_play_to_earn"
 };
 
-static int  lastPlayerScore[MAXPLAYERS];
-static int isDeadPlayer[MAXPLAYERS];
-int         objectivesCompleted          = 0;
-static bool objectiveInCooldown          = false;
-const float objectiveCooldown            = 5.0;
+static int   lastPlayerScore[MAXPLAYERS];
+static int   isDeadPlayer[MAXPLAYERS];
+static int   objectivesCompleted          = 0;
+static bool  objectiveInCooldown          = false;
+static float objectiveCooldown            = 5.0;
 
-char        objectiveRewards[15][20]     = { "200000000000000000", "20000000000000000", "300000000000000000",
-                                  "300000000000000000", "400000000000000000", "400000000000000000",
-                                  "500000000000000000", "500000000000000000", "500000000000000000",
-                                  "500000000000000000", "500000000000000000", "500000000000000000",
-                                  "500000000000000000", "500000000000000000", "500000000000000000" };
-const int   maxObjectives                = 15;
-char        objectiveRewardsShow[15][20] = { "0.2", "0.2", "0.3",
-                                      "0.3", "0.4", "0.4",
-                                      "0.5", "0.5", "0.5",
-                                      "0.5", "0.5", "0.5",
-                                      "0.5", "0.5", "0.5" };
-int         scorePoints[20]              = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
-char        scoreRewards[20][20]         = {
+static int   maxObjectives                = 15;
+static char  objectiveRewards[15][20]     = { "200000000000000000", "20000000000000000", "300000000000000000",
+                                         "300000000000000000", "400000000000000000", "400000000000000000",
+                                         "500000000000000000", "500000000000000000", "500000000000000000",
+                                         "500000000000000000", "500000000000000000", "500000000000000000",
+                                         "500000000000000000", "500000000000000000", "500000000000000000" };
+static char  objectiveRewardsShow[15][20] = { "0.2", "0.2", "0.3",
+                                             "0.3", "0.4", "0.4",
+                                             "0.5", "0.5", "0.5",
+                                             "0.5", "0.5", "0.5",
+                                             "0.5", "0.5", "0.5" };
+static int   scorePoints[20]              = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
+static char  scoreRewards[20][20]         = {
     "100000000000000000",
     "150000000000000000",
     "200000000000000000",
@@ -50,13 +50,13 @@ char        scoreRewards[20][20]         = {
     "1000000000000000000",
     "1050000000000000000"
 };
-char scoreRewardsShow[20][20] = { "0.1", "0.15", "0.2",
-                                  "0.25", "0.3", "0.35",
-                                  "0.4", "0.45", "0.5",
-                                  "0.55", "0.6", "0.65", "0.7",
-                                  "0.75", "0.8", "0.85",
-                                  "0.9", "0.95", "1.0",
-                                  "1.05" };
+static char scoreRewardsShow[20][20] = { "0.1", "0.15", "0.2",
+                                         "0.25", "0.3", "0.35",
+                                         "0.4", "0.45", "0.5",
+                                         "0.55", "0.6", "0.65", "0.7",
+                                         "0.75", "0.8", "0.85",
+                                         "0.9", "0.95", "1.0",
+                                         "1.05" };
 
 public void OnPluginStart()
 {
@@ -67,6 +67,226 @@ public void OnPluginStart()
         {
             PrintToServer("[PTE Objective] Will not be initialized, 'pteObjective' is not '1'");
             return;
+        }
+    }
+
+    // Configuration Load
+    {
+        char configPath[] = "addons/sourcemod/configs/play_to_earn_objective.cfg";
+
+        if (!FileExists(configPath))
+        {
+            Handle file = OpenFile(configPath, "w");
+            if (file != null)
+            {
+                WriteFileLine(file, "\"PlayToEarn\"");
+                WriteFileLine(file, "{");
+
+                WriteFileLine(file, "    \"maxObjectives\"       \"15\"");
+                WriteFileLine(file, "");
+
+                WriteFileLine(file, "    \"objectiveRewards\"");
+                WriteFileLine(file, "    {");
+                WriteFileLine(file, "        \"0\"  \"100000000000000000\"");
+                WriteFileLine(file, "        \"1\"  \"10000000000000000\"");
+                WriteFileLine(file, "        \"2\"  \"100000000000000000\"");
+                WriteFileLine(file, "        \"3\"  \"100000000000000000\"");
+                WriteFileLine(file, "        \"4\"  \"200000000000000000\"");
+                WriteFileLine(file, "        \"5\"  \"200000000000000000\"");
+                WriteFileLine(file, "        \"6\"  \"200000000000000000\"");
+                WriteFileLine(file, "        \"7\"  \"200000000000000000\"");
+                WriteFileLine(file, "        \"8\"  \"200000000000000000\"");
+                WriteFileLine(file, "        \"9\"  \"200000000000000000\"");
+                WriteFileLine(file, "        \"10\" \"200000000000000000\"");
+                WriteFileLine(file, "        \"11\" \"200000000000000000\"");
+                WriteFileLine(file, "        \"12\" \"200000000000000000\"");
+                WriteFileLine(file, "        \"13\" \"200000000000000000\"");
+                WriteFileLine(file, "        \"14\" \"300000000000000000\"");
+                WriteFileLine(file, "    }");
+                WriteFileLine(file, "");
+
+                WriteFileLine(file, "    \"objectiveRewardsShow\"");
+                WriteFileLine(file, "    {");
+                WriteFileLine(file, "        \"0\"  \"0.1\"");
+                WriteFileLine(file, "        \"1\"  \"0.1\"");
+                WriteFileLine(file, "        \"2\"  \"0.1\"");
+                WriteFileLine(file, "        \"3\"  \"0.1\"");
+                WriteFileLine(file, "        \"4\"  \"0.2\"");
+                WriteFileLine(file, "        \"5\"  \"0.2\"");
+                WriteFileLine(file, "        \"6\"  \"0.2\"");
+                WriteFileLine(file, "        \"7\"  \"0.2\"");
+                WriteFileLine(file, "        \"8\"  \"0.2\"");
+                WriteFileLine(file, "        \"9\"  \"0.2\"");
+                WriteFileLine(file, "        \"10\" \"0.2\"");
+                WriteFileLine(file, "        \"11\" \"0.2\"");
+                WriteFileLine(file, "        \"12\" \"0.2\"");
+                WriteFileLine(file, "        \"13\" \"0.2\"");
+                WriteFileLine(file, "        \"14\" \"0.3\"");
+                WriteFileLine(file, "    }");
+                WriteFileLine(file, "");
+
+                WriteFileLine(file, "    \"scorePoints\"");
+                WriteFileLine(file, "    {");
+                WriteFileLine(file, "        \"0\"  \"5\"");
+                WriteFileLine(file, "        \"1\"  \"10\"");
+                WriteFileLine(file, "        \"2\"  \"15\"");
+                WriteFileLine(file, "        \"3\"  \"20\"");
+                WriteFileLine(file, "        \"4\"  \"25\"");
+                WriteFileLine(file, "        \"5\"  \"30\"");
+                WriteFileLine(file, "        \"6\"  \"35\"");
+                WriteFileLine(file, "        \"7\"  \"40\"");
+                WriteFileLine(file, "        \"8\"  \"45\"");
+                WriteFileLine(file, "        \"9\"  \"50\"");
+                WriteFileLine(file, "        \"10\" \"55\"");
+                WriteFileLine(file, "        \"11\" \"60\"");
+                WriteFileLine(file, "        \"12\" \"65\"");
+                WriteFileLine(file, "        \"13\" \"70\"");
+                WriteFileLine(file, "        \"14\" \"75\"");
+                WriteFileLine(file, "        \"15\" \"80\"");
+                WriteFileLine(file, "        \"16\" \"85\"");
+                WriteFileLine(file, "        \"17\" \"90\"");
+                WriteFileLine(file, "        \"18\" \"95\"");
+                WriteFileLine(file, "        \"19\" \"100\"");
+                WriteFileLine(file, "    }");
+                WriteFileLine(file, "");
+
+                WriteFileLine(file, "    \"scoreRewards\"");
+                WriteFileLine(file, "    {");
+                WriteFileLine(file, "        \"0\"  \"100000000000000000\"");
+                WriteFileLine(file, "        \"1\"  \"150000000000000000\"");
+                WriteFileLine(file, "        \"2\"  \"200000000000000000\"");
+                WriteFileLine(file, "        \"3\"  \"250000000000000000\"");
+                WriteFileLine(file, "        \"4\"  \"300000000000000000\"");
+                WriteFileLine(file, "        \"5\"  \"350000000000000000\"");
+                WriteFileLine(file, "        \"6\"  \"400000000000000000\"");
+                WriteFileLine(file, "        \"7\"  \"450000000000000000\"");
+                WriteFileLine(file, "        \"8\"  \"500000000000000000\"");
+                WriteFileLine(file, "        \"9\"  \"550000000000000000\"");
+                WriteFileLine(file, "        \"10\" \"600000000000000000\"");
+                WriteFileLine(file, "        \"11\" \"650000000000000000\"");
+                WriteFileLine(file, "        \"12\" \"700000000000000000\"");
+                WriteFileLine(file, "        \"13\" \"750000000000000000\"");
+                WriteFileLine(file, "        \"14\" \"800000000000000000\"");
+                WriteFileLine(file, "        \"15\" \"850000000000000000\"");
+                WriteFileLine(file, "        \"16\" \"900000000000000000\"");
+                WriteFileLine(file, "        \"17\" \"950000000000000000\"");
+                WriteFileLine(file, "        \"18\" \"1000000000000000000\"");
+                WriteFileLine(file, "        \"19\" \"1050000000000000000\"");
+                WriteFileLine(file, "    }");
+                WriteFileLine(file, "");
+
+                WriteFileLine(file, "    \"scoreRewardsShow\"");
+                WriteFileLine(file, "    {");
+                WriteFileLine(file, "        \"0\"  \"0.1\"");
+                WriteFileLine(file, "        \"1\"  \"0.15\"");
+                WriteFileLine(file, "        \"2\"  \"0.2\"");
+                WriteFileLine(file, "        \"3\"  \"0.25\"");
+                WriteFileLine(file, "        \"4\"  \"0.3\"");
+                WriteFileLine(file, "        \"5\"  \"0.35\"");
+                WriteFileLine(file, "        \"6\"  \"0.4\"");
+                WriteFileLine(file, "        \"7\"  \"0.45\"");
+                WriteFileLine(file, "        \"8\"  \"0.5\"");
+                WriteFileLine(file, "        \"9\"  \"0.55\"");
+                WriteFileLine(file, "        \"10\" \"0.6\"");
+                WriteFileLine(file, "        \"11\" \"0.65\"");
+                WriteFileLine(file, "        \"12\" \"0.7\"");
+                WriteFileLine(file, "        \"13\" \"0.75\"");
+                WriteFileLine(file, "        \"14\" \"0.8\"");
+                WriteFileLine(file, "        \"15\" \"0.85\"");
+                WriteFileLine(file, "        \"16\" \"0.9\"");
+                WriteFileLine(file, "        \"17\" \"0.95\"");
+                WriteFileLine(file, "        \"18\" \"1.0\"");
+                WriteFileLine(file, "        \"19\" \"1.05\"");
+                WriteFileLine(file, "    }");
+
+                WriteFileLine(file, "}");
+                CloseHandle(file);
+                PrintToServer("[PTE] Configuration file created: %s", configPath);
+            }
+            else
+            {
+                PrintToServer("[PTE] Cannot create default file.");
+                return;
+            }
+        }
+
+        KeyValues kv = new KeyValues("PlayToEarn");
+        if (!kv.ImportFromFile(configPath))
+        {
+            delete kv;
+            PrintToServer("[PTE] Cannot load configuration file: %s", configPath);
+        }
+        // Loading from file
+        else {
+            maxObjectives = kv.GetNum("maxObjectives", 15);
+
+            if (kv.JumpToKey("objectiveRewards"))
+            {
+                for (int i = 0; i < maxObjectives; i++)
+                {
+                    char key[8];
+                    Format(key, sizeof(key), "%d", i);
+                    char value[32];
+                    kv.GetString(key, value, sizeof(value), "100000000000000000");
+                    strcopy(objectiveRewards[i], sizeof(objectiveRewards[i]), value);
+                }
+                kv.GoBack();
+                PrintToServer("[PTE] objectiveRewards Loaded!");
+            }
+
+            if (kv.JumpToKey("objectiveRewardsShow"))
+            {
+                for (int i = 0; i < maxObjectives; i++)
+                {
+                    char key[8];
+                    Format(key, sizeof(key), "%d", i);
+                    char value[32];
+                    kv.GetString(key, value, sizeof(value), "0.1");
+                    strcopy(objectiveRewardsShow[i], sizeof(objectiveRewardsShow[i]), value);
+                }
+                kv.GoBack();
+                PrintToServer("[PTE] objectiveRewardsShow Loaded!");
+            }
+
+            if (kv.JumpToKey("scorePoints"))
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    char key[8];
+                    Format(key, sizeof(key), "%d", i);
+                    scorePoints[i] = kv.GetNum(key, 0);
+                }
+                kv.GoBack();
+                PrintToServer("[PTE] scorePoints Loaded!");
+            }
+
+            if (kv.JumpToKey("scoreRewards"))
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    char key[8];
+                    Format(key, sizeof(key), "%d", i);
+                    char value[32];
+                    kv.GetString(key, value, sizeof(value), "100000000000000000");
+                    strcopy(scoreRewards[i], sizeof(scoreRewards[i]), value);
+                }
+                kv.GoBack();
+                PrintToServer("[PTE] scoreRewards Loaded!");
+            }
+
+            if (kv.JumpToKey("scoreRewardsShow"))
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    char key[8];
+                    Format(key, sizeof(key), "%d", i);
+                    char value[32];
+                    kv.GetString(key, value, sizeof(value), "0.1");
+                    strcopy(scoreRewardsShow[i], sizeof(scoreRewardsShow[i]), value);
+                }
+                kv.GoBack();
+                PrintToServer("[PTE] scoreRewardsShow Loaded!");
+            }
         }
     }
 
