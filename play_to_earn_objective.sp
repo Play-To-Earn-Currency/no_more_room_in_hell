@@ -17,7 +17,7 @@ static bool  objectiveInCooldown          = false;
 static float objectiveCooldown            = 5.0;
 
 static int   maxObjectives                = 15;
-static char  objectiveRewards[15][20]     = { "200000000000000000", "20000000000000000", "300000000000000000",
+static char  objectiveRewards[15][40]     = { "200000000000000000", "20000000000000000", "300000000000000000",
                                          "300000000000000000", "400000000000000000", "400000000000000000",
                                          "500000000000000000", "500000000000000000", "500000000000000000",
                                          "500000000000000000", "500000000000000000", "500000000000000000",
@@ -28,7 +28,7 @@ static char  objectiveRewardsShow[15][20] = { "0.2", "0.2", "0.3",
                                              "0.5", "0.5", "0.5",
                                              "0.5", "0.5", "0.5" };
 static int   scorePoints[20]              = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
-static char  scoreRewards[20][20]         = {
+static char  scoreRewards[20][40]         = {
     "100000000000000000",
     "150000000000000000",
     "200000000000000000",
@@ -243,6 +243,7 @@ public void OnPluginStart()
                     char value[32];
                     kv.GetString(key, value, sizeof(value), "0.1");
                     strcopy(objectiveRewardsShow[i], sizeof(objectiveRewardsShow[i]), value);
+                    TrimTrailingZeros(objectiveRewardsShow[i]);
                 }
                 kv.GoBack();
                 PrintToServer("[PTE] objectiveRewardsShow Loaded!");
@@ -283,6 +284,7 @@ public void OnPluginStart()
                     char value[32];
                     kv.GetString(key, value, sizeof(value), "0.1");
                     strcopy(scoreRewardsShow[i], sizeof(scoreRewardsShow[i]), value);
+                    TrimTrailingZeros(scoreRewardsShow[i]);
                 }
                 kv.GoBack();
                 PrintToServer("[PTE] scoreRewardsShow Loaded!");

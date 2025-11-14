@@ -15,7 +15,7 @@ static int  isDeadPlayer[MAXPLAYERS];
 static int  serverWave              = 0;
 
 static int  maxWaves                = 15;
-static char waveRewards[15][20]     = { "100000000000000000", "10000000000000000", "100000000000000000",
+static char waveRewards[15][40]     = { "100000000000000000", "10000000000000000", "100000000000000000",
                                     "100000000000000000", "200000000000000000", "200000000000000000",
                                     "200000000000000000", "200000000000000000", "200000000000000000",
                                     "200000000000000000", "200000000000000000", "200000000000000000",
@@ -26,7 +26,7 @@ static char waveRewardsShow[15][20] = { "0.1", "0.1", "0.1",
                                         "0.2", "0.2", "0.2",
                                         "0.2", "0.2", "0.3" };
 static int  scorePoints[20]         = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
-static char scoreRewards[20][20]    = {
+static char scoreRewards[20][40]    = {
     "100000000000000000",
     "150000000000000000",
     "200000000000000000",
@@ -241,6 +241,7 @@ public void OnPluginStart()
                     char value[32];
                     kv.GetString(key, value, sizeof(value), "0.1");
                     strcopy(waveRewardsShow[i], sizeof(waveRewardsShow[i]), value);
+                    TrimTrailingZeros(waveRewardsShow[i]);
                 }
                 kv.GoBack();
                 PrintToServer("[PTE] waveRewardsShow Loaded!");
@@ -281,6 +282,7 @@ public void OnPluginStart()
                     char value[32];
                     kv.GetString(key, value, sizeof(value), "0.1");
                     strcopy(scoreRewardsShow[i], sizeof(scoreRewardsShow[i]), value);
+                    TrimTrailingZeros(scoreRewardsShow[i]);
                 }
                 kv.GoBack();
                 PrintToServer("[PTE] scoreRewardsShow Loaded!");

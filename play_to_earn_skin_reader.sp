@@ -24,7 +24,6 @@ public void OnPluginStart()
     // Third Person command
     RegConsoleCmd("tps", ToggleView, "Enters in third person");
 
-    enableSkinMenu = true;
     PrintToServer("[Skin Reader] Skin Reader plugin has been initialized");
 }
 

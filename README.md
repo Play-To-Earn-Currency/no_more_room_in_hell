@@ -4,6 +4,8 @@ Base template for running a server with play to earn support
 ## Functionality
 - Surviving rounds will earn PTE
 - The more rounds the player survive the more PTE he will earn
+- Finishing objectives will earn PTE
+- The more objectives the player finish the more PTE he will earn
 - Setup wallet as command ``!wallet 0x123...``
 
 ## Configuring
