@@ -64,9 +64,6 @@ Everthing should work now, you can edit your database table ``nmrih_skins`` to h
 
 If you need the entire skin source for generating your own NMRIH server, you should take a look in the PTE NMRIH official discord server
 
-## Web Skin
-A template website for running a skin selector
-
 # Recomendations
 - [Anti Server Lag Exploits](https://forums.alliedmods.net/showthread.php?p=2788390)
 - [Health and Stamina Display](https://forums.alliedmods.net/showthread.php?t=318836)

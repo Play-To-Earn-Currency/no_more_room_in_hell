@@ -31,7 +31,7 @@ public void OnMapStart()
 {
     TotalSkins = 0;
 
-    LoadSkinsToDownloadTable();
+    Simple_InitSkins();
 }
 
 //
